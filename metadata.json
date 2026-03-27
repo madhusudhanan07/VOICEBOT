@@ -1,0 +1,7 @@
+{
+  "name": "AYAARA - Your Calm Companion",
+  "description": "A premium, empathetic AI voice assistant for students to manage stress, anxiety, and motivation through natural conversation.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
