@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { 
-  Mic, MicOff, Volume2, VolumeX, Heart, Sparkles, Coffee, Wind, Info, AlertCircle,
+  Mic, MicOff, Volume2, Heart, Sparkles, Coffee, Wind, Info, AlertCircle,
   Eye, Zap, MapPin, Footprints, Dumbbell, PenTool, Star, Droplets, Moon, LayoutGrid,
   Timer, Brain
 } from "lucide-react";
@@ -13,9 +13,7 @@ export default function App() {
   const [status, setStatus] = useState("Ready to talk");
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState("");
-  const [isMuted, setIsMuted] = useState(false);
   const [mood, setMood] = useState<number | null>(null);
-  const [showMoodPicker, setShowMoodPicker] = useState(false);
   const [sensitivity, setSensitivity] = useState(1.0);
   const [showBreathing, setShowBreathing] = useState(false);
   const [language, setLanguage] = useState("English");
@@ -116,7 +114,6 @@ export default function App() {
 
   const handleMoodSelect = (value: number) => {
     setMood(value);
-    setShowMoodPicker(false);
   };
 
   const handleSensitivityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,25 +127,45 @@ export default function App() {
     setTimeout(() => setShowBreathing(false), 30000); // 30 seconds exercise
   };
 
+  const wellnessActivities = [
+    { icon: Wind, label: "Breathing", action: startBreathing },
+    { icon: Eye, label: "Visualize", action: "Guided Visualization" },
+    { icon: MapPin, label: "Grounding", action: "5-4-3-2-1 Grounding" },
+    { icon: Timer, label: "Focus", action: "Focus Session" },
+    { icon: PenTool, label: "Journal", action: "Journaling Prompt" },
+    { icon: Star, label: "Affirm", action: "Positive Affirmations" },
+    { icon: Dumbbell, label: "Stretch", action: "Stretching Exercise" },
+    { icon: Droplets, label: "Hydrate", action: "Hydration Reminder" },
+    { icon: Moon, label: "Sleep", action: "Sleep Hygiene Tips" },
+    { icon: Brain, label: "Body Scan", action: "Body Relaxation Scan" },
+    { icon: Footprints, label: "Walk", action: "Short Walk" },
+    { icon: Heart, label: "Gratitude", action: "Gratitude Exercise" },
+  ];
+
   return (
-    <div className="min-h-screen bg-[#0a0502] text-[#e0d8d0] font-sans selection:bg-[#ff4e00]/30 overflow-hidden flex flex-col items-center justify-center p-6 relative">
+    <div className="min-h-screen bg-[#F5F5F0] dark:bg-[#0F172A] text-[#0F172A] dark:text-[#F8FAFC] font-sans selection:bg-[#0891B2]/30 overflow-hidden flex flex-col items-center justify-center p-4 md:p-8 relative transition-colors duration-700">
       <AnimatePresence>
         {showBreathing && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-[#0a0502]/95 backdrop-blur-3xl flex flex-col items-center justify-center gap-12"
+            className="fixed inset-0 z-[100] bg-[#F5F5F0]/95 dark:bg-[#0F172A]/95 backdrop-blur-md flex flex-col items-center justify-center gap-12"
           >
             <motion.div
-              animate={{ scale: [1, 1.5, 1] }}
-              transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
-              className="w-48 h-48 rounded-full border-2 border-[#ff4e00] flex items-center justify-center"
+              animate={{ scale: [1, 1.8, 1] }}
+              transition={{ repeat: Infinity, duration: 8, ease: [0.32, 0.72, 0, 1] }}
+              className="w-48 h-48 rounded-full bg-[#0891B2]/20 dark:bg-[#2DD4BF]/20 blur-xl absolute"
+            />
+            <motion.div
+              animate={{ scale: [1, 1.4, 1] }}
+              transition={{ repeat: Infinity, duration: 8, ease: [0.32, 0.72, 0, 1] }}
+              className="w-32 h-32 rounded-full border border-[#0891B2] dark:border-[#2DD4BF] flex items-center justify-center relative z-10 bg-white/50 dark:bg-black/20 backdrop-blur-sm"
             >
               <motion.div
-                animate={{ opacity: [0.2, 1, 0.2] }}
+                animate={{ opacity: [0.4, 1, 0.4] }}
                 transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
-                className="text-[#ff4e00] text-xl font-serif italic"
+                className="text-[#0891B2] dark:text-[#2DD4BF] text-lg font-serif italic"
               >
                 <AnimatePresence mode="wait">
                   <motion.span
@@ -164,7 +181,7 @@ export default function App() {
             </motion.div>
             <button 
               onClick={() => setShowBreathing(false)}
-              className="text-xs uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity"
+              className="text-sm uppercase tracking-widest text-[#6B7280] dark:text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-[#F8FAFC] transition-colors relative z-10"
             >
               End Session
             </button>
@@ -172,51 +189,53 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* Atmospheric Background */}
+      {/* Atmospheric Biophilic Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-[#3a1510] rounded-full blur-[120px] opacity-40 animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#ff4e00] rounded-full blur-[120px] opacity-20 animate-pulse" style={{ animationDelay: '2s' }} />
+        <motion.div 
+          animate={{ x: [-20, 20, -20], y: [-20, 20, -20] }}
+          transition={{ repeat: Infinity, duration: 15, ease: "easeInOut" }}
+          className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#0891B2] dark:bg-[#2DD4BF] rounded-full blur-[140px] opacity-[0.15] dark:opacity-[0.1]" 
+        />
+        <motion.div 
+          animate={{ x: [20, -20, 20], y: [20, -20, 20] }}
+          transition={{ repeat: Infinity, duration: 18, ease: "easeInOut" }}
+          className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-[#10B981] dark:bg-[#047857] rounded-full blur-[160px] opacity-[0.1] dark:opacity-[0.15]" 
+        />
       </div>
 
       {/* Main Content */}
-      <main className="relative z-10 w-full max-w-2xl flex flex-col items-center gap-12">
+      <main className="relative z-10 w-full max-w-3xl flex flex-col items-center gap-12 pb-12">
         {/* Header */}
-        <header className="text-center space-y-2">
+        <header className="text-center space-y-3 mt-4">
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center justify-center gap-2 text-[#ff4e00]"
+            className="flex items-center justify-center gap-2 text-[#0891B2] dark:text-[#2DD4BF]"
           >
-            <Sparkles size={20} />
-            <span className="text-xs font-medium uppercase tracking-[0.2em]">AYAARA - Your Calm Companion</span>
+            <Sparkles size={18} />
+            <span className="text-[11px] font-semibold uppercase tracking-[0.25em]">Your Calm Companion</span>
           </motion.div>
           <motion.h1 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-6xl md:text-8xl font-serif font-light tracking-tighter"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-5xl md:text-7xl font-serif text-[#0F172A] dark:text-[#F8FAFC]"
           >
             AYAARA
           </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.6 }}
-            className="text-sm font-light italic"
-          >
-            Your multilingual companion for mental wellness
-          </motion.p>
         </header>
 
         {/* Language Selector */}
-        <div className="flex flex-wrap justify-center gap-2">
+        <div className="flex flex-wrap justify-center gap-3">
           {["English", "Tamil", "Malayalam", "Telugu", "Hindi"].map((lang) => (
             <button
               key={lang}
               onClick={() => handleLanguageChange(lang)}
               className={cn(
-                "px-4 py-1.5 rounded-full text-[10px] uppercase tracking-widest transition-all border",
+                "px-5 py-2 rounded-full text-[11px] uppercase font-semibold tracking-wider transition-all duration-300",
                 language === lang 
-                  ? "bg-[#ff4e00] border-[#ff4e00] text-white" 
-                  : "bg-white/5 border-white/10 text-white/40 hover:bg-white/10"
+                  ? "bg-[#0891B2] dark:bg-[#2DD4BF] text-white dark:text-[#0F172A] shadow-md shadow-[#0891B2]/20" 
+                  : "bg-white/60 dark:bg-[#1E293B]/60 text-[#6B7280] dark:text-[#94A3B8] hover:bg-white dark:hover:bg-[#1E293B] hover:text-[#0F172A] dark:hover:text-[#F8FAFC]"
               )}
             >
               {lang}
@@ -225,7 +244,7 @@ export default function App() {
         </div>
 
         {/* Interaction Area */}
-        <div className="w-full flex flex-col items-center gap-8">
+        <div className="w-full flex flex-col items-center gap-10">
           {/* Visualizer / Pulse */}
           <div className="relative flex items-center justify-center w-64 h-64">
             <AnimatePresence>
@@ -233,17 +252,18 @@ export default function App() {
                 <>
                   <motion.div
                     initial={{ scale: 0.8, opacity: 0 }}
-                    animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }}
+                    animate={{ scale: [1, 1.4, 1], opacity: [0.1, 0.3, 0.1] }}
                     exit={{ scale: 0.8, opacity: 0 }}
-                    transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-                    className="absolute inset-0 bg-[#ff4e00] rounded-full blur-3xl"
+                    transition={{ repeat: Infinity, duration: 4, ease: [0.32, 0.72, 0, 1] }}
+                    className="absolute inset-0 bg-[#0891B2] dark:bg-[#2DD4BF] rounded-[40%] blur-2xl"
+                    style={{ borderRadius: '45% 55% 40% 60% / 55% 45% 60% 40%' }}
                   />
                   <motion.div
                     initial={{ scale: 0.9, opacity: 0 }}
-                    animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
+                    animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.5, 0.2] }}
                     exit={{ scale: 0.9, opacity: 0 }}
-                    transition={{ repeat: Infinity, duration: 2, ease: "easeInOut", delay: 0.5 }}
-                    className="absolute inset-4 border border-[#ff4e00]/30 rounded-full"
+                    transition={{ repeat: Infinity, duration: 3, ease: "easeInOut", delay: 0.2 }}
+                    className="absolute inset-8 border border-[#0891B2]/30 dark:border-[#2DD4BF]/30 rounded-[50%]"
                   />
                 </>
               )}
@@ -253,11 +273,14 @@ export default function App() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={toggleConnection}
+              aria-label={isConnected ? "Disconnect from AYAARA" : "Connect to AYAARA"}
               className={cn(
                 "relative z-20 w-32 h-32 rounded-full flex items-center justify-center transition-all duration-500",
                 isConnected 
-                  ? (isListening ? "bg-[#ff4e00] text-white shadow-[0_0_60px_rgba(255,78,0,0.6)]" : "bg-[#ff4e00]/80 text-white shadow-[0_0_40px_rgba(255,78,0,0.3)]")
-                  : "bg-white/5 border border-white/10 text-white/40 hover:bg-white/10 hover:text-white/60"
+                  ? (isListening 
+                      ? "bg-[#0891B2] dark:bg-[#2DD4BF] text-white dark:text-[#0F172A] shadow-[0_8px_32px_rgba(8,145,178,0.3)]" 
+                      : "bg-[#0891B2]/80 dark:bg-[#2DD4BF]/80 text-white dark:text-[#0F172A] shadow-lg")
+                  : "bg-white dark:bg-[#1E293B] text-[#6B7280] dark:text-[#94A3B8] shadow-sm hover:shadow-md hover:text-[#0891B2] dark:hover:text-[#2DD4BF]"
               )}
             >
               {isConnected ? (
@@ -269,19 +292,19 @@ export default function App() {
           </div>
 
           {/* Status & Transcript */}
-          <div className="text-center space-y-4 w-full px-4">
-            <div className="flex items-center justify-center gap-2 text-xs font-mono tracking-widest uppercase opacity-40">
-              <div className={cn("w-1.5 h-1.5 rounded-full", isConnected ? "bg-green-500 animate-pulse" : "bg-white/20")} />
+          <div className="w-full flex flex-col items-center gap-4 px-4 max-w-2xl">
+            <div className="flex items-center justify-center gap-2 text-[11px] font-semibold tracking-widest uppercase text-[#6B7280] dark:text-[#94A3B8]">
+              <div className={cn("w-2 h-2 rounded-full", isConnected ? "bg-[#10B981] animate-pulse" : "bg-[#D1D5DB] dark:bg-[#475569]")} />
               {status}
             </div>
             
-            <div className="max-h-[300px] overflow-y-auto w-full space-y-6 px-2 scrollbar-hide flex flex-col items-center">
+            <div className="max-h-[320px] overflow-y-auto w-full space-y-6 px-4 py-2 scrollbar-hide flex flex-col">
               <AnimatePresence mode="popLayout">
                 {messages.length === 0 && !isConnected && (
                   <motion.p 
                     initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.4 }}
-                    className="text-sm italic"
+                    animate={{ opacity: 1 }}
+                    className="text-[15px] italic text-center text-[#6B7280] dark:text-[#94A3B8]"
                   >
                     Tap the microphone to start your session
                   </motion.p>
@@ -291,31 +314,31 @@ export default function App() {
                   return (
                     <motion.div
                       key={idx}
-                      initial={{ opacity: 0, y: 20 }}
+                      initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
                       className={cn(
                         "w-full flex flex-col gap-3",
-                        msg.role === 'user' ? "items-end" : "items-center"
+                        msg.role === 'user' ? "items-end" : "items-start"
                       )}
                     >
                       <div className={cn(
-                        "max-w-[85%] p-4 rounded-2xl text-sm leading-relaxed",
+                        "max-w-[90%] md:max-w-[80%] p-5 rounded-2xl text-[15px] leading-relaxed shadow-sm",
                         msg.role === 'user' 
-                          ? "bg-[#ff4e00]/10 border border-[#ff4e00]/20 text-[#ff4e00]" 
-                          : "bg-white/5 border border-white/10 text-white/80 italic font-serif"
+                          ? "bg-[#0891B2]/10 dark:bg-[#2DD4BF]/10 text-[#0F172A] dark:text-[#F8FAFC] rounded-tr-sm border border-[#0891B2]/20" 
+                          : "bg-white dark:bg-[#1E293B] text-[#0F172A] dark:text-[#F1F5F9] rounded-tl-sm font-serif"
                       )}>
                         {cleanText}
                       </div>
                       
                       {buttons.length > 0 && (
-                        <div className="flex flex-wrap justify-center gap-2 mt-2">
+                        <div className="flex flex-wrap gap-2 mt-1">
                           {buttons.map((btn, bIdx) => (
                             <motion.button
                               key={bIdx}
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
+                              whileHover={{ scale: 1.03 }}
+                              whileTap={{ scale: 0.97 }}
                               onClick={() => handleActionClick(btn)}
-                              className="px-4 py-2 rounded-xl bg-[#ff4e00]/10 border border-[#ff4e00]/20 text-[#ff4e00] text-[10px] uppercase tracking-widest hover:bg-[#ff4e00] hover:text-white transition-all"
+                              className="px-4 py-2.5 rounded-xl bg-white dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] text-[#0891B2] dark:text-[#2DD4BF] text-[12px] font-semibold tracking-wide hover:bg-[#F5F5F0] dark:hover:bg-[#334155] transition-colors shadow-sm"
                             >
                               {btn}
                             </motion.button>
@@ -326,37 +349,63 @@ export default function App() {
                   );
                 })}
               </AnimatePresence>
-              <div ref={messagesEndRef} />
+              <div ref={messagesEndRef} className="h-4" />
             </div>
           </div>
         </div>
 
-        {/* Quick Actions / Mood */}
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Activities & Relief (Scrollable Row) */}
+        <div className="w-full flex flex-col gap-4 px-4">
+          <div className="flex items-center justify-between px-2">
+            <h3 className="text-[11px] font-bold uppercase tracking-wider text-[#6B7280] dark:text-[#94A3B8] flex items-center gap-2">
+              <LayoutGrid size={14} className="text-[#0891B2] dark:text-[#2DD4BF]" />
+              Wellness Activities
+            </h3>
+          </div>
+          
+          <div className="flex overflow-x-auto gap-3 pb-4 scrollbar-hide snap-x px-2">
+            {wellnessActivities.map((activity, idx) => (
+              <motion.button
+                key={idx}
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.96 }}
+                onClick={() => typeof activity.action === 'string' ? handleActionClick(activity.action) : activity.action()}
+                className="snap-start flex-none w-[110px] h-[100px] flex flex-col items-center justify-center gap-3 bg-white dark:bg-[#1E293B] rounded-2xl shadow-sm border border-[#E2E8F0] dark:border-[#334155] text-[#475569] dark:text-[#94A3B8] hover:text-[#0891B2] dark:hover:text-[#2DD4BF] hover:border-[#0891B2]/30 dark:hover:border-[#2DD4BF]/30 transition-all group"
+              >
+                <div className="w-10 h-10 rounded-full bg-[#F5F5F0] dark:bg-[#0F172A] flex items-center justify-center group-hover:bg-[#0891B2]/10 dark:group-hover:bg-[#2DD4BF]/10 transition-colors">
+                  <activity.icon size={18} className="text-[#6B7280] dark:text-[#94A3B8] group-hover:text-[#0891B2] dark:group-hover:text-[#2DD4BF]" />
+                </div>
+                <span className="text-[12px] font-semibold">{activity.label}</span>
+              </motion.button>
+            ))}
+          </div>
+        </div>
+
+        {/* Mood & Settings Grid */}
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 px-4">
           <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4 }}
-            className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 space-y-4"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white/80 dark:bg-[#1E293B]/80 backdrop-blur-xl border border-[#E2E8F0] dark:border-[#334155] rounded-3xl p-6 space-y-5 shadow-sm"
           >
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-medium uppercase tracking-wider opacity-60 flex items-center gap-2">
-                <Heart size={14} className="text-[#ff4e00]" />
+              <h3 className="text-[11px] font-bold uppercase tracking-wider text-[#6B7280] dark:text-[#94A3B8] flex items-center gap-2">
+                <Heart size={14} className="text-[#0891B2] dark:text-[#2DD4BF]" />
                 How are you feeling?
               </h3>
-              {mood && <span className="text-[#ff4e00] font-serif italic">{mood}/10</span>}
+              {mood && <span className="text-[#0891B2] dark:text-[#2DD4BF] font-serif font-medium">{mood}/10</span>}
             </div>
             
-            <div className="flex justify-between gap-1">
+            <div className="flex justify-between gap-1.5">
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((val) => (
                 <button
                   key={val}
                   onClick={() => handleMoodSelect(val)}
                   className={cn(
-                    "flex-1 h-8 rounded-lg text-[10px] font-mono transition-all",
+                    "flex-1 h-10 rounded-xl text-[12px] font-semibold transition-all duration-300",
                     mood === val 
-                      ? "bg-[#ff4e00] text-white" 
-                      : "bg-white/5 hover:bg-white/10 text-white/40"
+                      ? "bg-[#0891B2] dark:bg-[#2DD4BF] text-white dark:text-[#0F172A] shadow-md" 
+                      : "bg-[#F5F5F0] dark:bg-[#0F172A] hover:bg-[#E2E8F0] dark:hover:bg-[#334155] text-[#6B7280] dark:text-[#94A3B8]"
                   )}
                 >
                   {val}
@@ -366,191 +415,50 @@ export default function App() {
           </motion.div>
 
           <motion.div 
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.5 }}
-            className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 flex flex-col gap-4"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="bg-white/80 dark:bg-[#1E293B]/80 backdrop-blur-xl border border-[#E2E8F0] dark:border-[#334155] rounded-3xl p-6 space-y-5 shadow-sm flex flex-col justify-center"
           >
-            <h3 className="text-xs font-medium uppercase tracking-wider opacity-60 flex items-center gap-2">
-              <LayoutGrid size={14} className="text-[#ff4e00]" />
-              Activities & Relief
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              <button 
-                onClick={startBreathing}
-                className="py-2 px-3 rounded-xl bg-white/5 hover:bg-[#ff4e00]/20 border border-white/5 text-[9px] uppercase tracking-tighter flex flex-col items-center justify-center gap-1 transition-all group"
-              >
-                <Wind size={14} className="group-hover:text-[#ff4e00]" />
-                Breathing
-              </button>
-              <button 
-                onClick={() => handleActionClick("Guided Visualization")}
-                className="py-2 px-3 rounded-xl bg-white/5 hover:bg-[#ff4e00]/20 border border-white/5 text-[9px] uppercase tracking-tighter flex flex-col items-center justify-center gap-1 transition-all group"
-              >
-                <Eye size={14} className="group-hover:text-[#ff4e00]" />
-                Visualize
-              </button>
-              <button 
-                onClick={() => handleActionClick("5-4-3-2-1 Grounding")}
-                className="py-2 px-3 rounded-xl bg-white/5 hover:bg-[#ff4e00]/20 border border-white/5 text-[9px] uppercase tracking-tighter flex flex-col items-center justify-center gap-1 transition-all group"
-              >
-                <MapPin size={14} className="group-hover:text-[#ff4e00]" />
-                Grounding
-              </button>
-              <button 
-                onClick={() => handleActionClick("Focus Session")}
-                className="py-2 px-3 rounded-xl bg-white/5 hover:bg-[#ff4e00]/20 border border-white/5 text-[9px] uppercase tracking-tighter flex flex-col items-center justify-center gap-1 transition-all group"
-              >
-                <Timer size={14} className="group-hover:text-[#ff4e00]" />
-                Focus
-              </button>
-              <button 
-                onClick={() => handleActionClick("Journaling Prompt")}
-                className="py-2 px-3 rounded-xl bg-white/5 hover:bg-[#ff4e00]/20 border border-white/5 text-[9px] uppercase tracking-tighter flex flex-col items-center justify-center gap-1 transition-all group"
-              >
-                <PenTool size={14} className="group-hover:text-[#ff4e00]" />
-                Journal
-              </button>
-              <button 
-                onClick={() => handleActionClick("Positive Affirmations")}
-                className="py-2 px-3 rounded-xl bg-white/5 hover:bg-[#ff4e00]/20 border border-white/5 text-[9px] uppercase tracking-tighter flex flex-col items-center justify-center gap-1 transition-all group"
-              >
-                <Star size={14} className="group-hover:text-[#ff4e00]" />
-                Affirm
-              </button>
-              <button 
-                onClick={() => handleActionClick("Stretching Exercise")}
-                className="py-2 px-3 rounded-xl bg-white/5 hover:bg-[#ff4e00]/20 border border-white/5 text-[9px] uppercase tracking-tighter flex flex-col items-center justify-center gap-1 transition-all group"
-              >
-                <Dumbbell size={14} className="group-hover:text-[#ff4e00]" />
-                Stretch
-              </button>
-              <button 
-                onClick={() => handleActionClick("Hydration Reminder")}
-                className="py-2 px-3 rounded-xl bg-white/5 hover:bg-[#ff4e00]/20 border border-white/5 text-[9px] uppercase tracking-tighter flex flex-col items-center justify-center gap-1 transition-all group"
-              >
-                <Droplets size={14} className="group-hover:text-[#ff4e00]" />
-                Hydrate
-              </button>
-              <button 
-                onClick={() => handleActionClick("Sleep Hygiene Tips")}
-                className="py-2 px-3 rounded-xl bg-white/5 hover:bg-[#ff4e00]/20 border border-white/5 text-[9px] uppercase tracking-tighter flex flex-col items-center justify-center gap-1 transition-all group"
-              >
-                <Moon size={14} className="group-hover:text-[#ff4e00]" />
-                Sleep
-              </button>
-              <button 
-                onClick={() => handleActionClick("Body Relaxation Scan")}
-                className="py-2 px-3 rounded-xl bg-white/5 hover:bg-[#ff4e00]/20 border border-white/5 text-[9px] uppercase tracking-tighter flex flex-col items-center justify-center gap-1 transition-all group"
-              >
-                <Brain size={14} className="group-hover:text-[#ff4e00]" />
-                Body Scan
-              </button>
-              <button 
-                onClick={() => handleActionClick("Short Walk")}
-                className="py-2 px-3 rounded-xl bg-white/5 hover:bg-[#ff4e00]/20 border border-white/5 text-[9px] uppercase tracking-tighter flex flex-col items-center justify-center gap-1 transition-all group"
-              >
-                <Footprints size={14} className="group-hover:text-[#ff4e00]" />
-                Walk
-              </button>
-              <button 
-                onClick={() => handleActionClick("Cold Water Splash")}
-                className="py-2 px-3 rounded-xl bg-white/5 hover:bg-[#ff4e00]/20 border border-white/5 text-[9px] uppercase tracking-tighter flex flex-col items-center justify-center gap-1 transition-all group"
-              >
-                <Zap size={14} className="group-hover:text-[#ff4e00]" />
-                Cold Water
-              </button>
-              <button 
-                onClick={() => handleActionClick("Gratitude Exercise")}
-                className="py-2 px-3 rounded-xl bg-white/5 hover:bg-[#ff4e00]/20 border border-white/5 text-[9px] uppercase tracking-tighter flex flex-col items-center justify-center gap-1 transition-all group"
-              >
-                <Heart size={14} className="group-hover:text-[#ff4e00]" />
-                Gratitude
-              </button>
-              <button 
-                onClick={() => handleActionClick("Start Small Method")}
-                className="py-2 px-3 rounded-xl bg-white/5 hover:bg-[#ff4e00]/20 border border-white/5 text-[9px] uppercase tracking-tighter flex flex-col items-center justify-center gap-1 transition-all group"
-              >
-                <Zap size={14} className="group-hover:text-[#ff4e00]" />
-                Start Small
-              </button>
-              <button 
-                onClick={() => handleActionClick("Pomodoro Timer")}
-                className="py-2 px-3 rounded-xl bg-white/5 hover:bg-[#ff4e00]/20 border border-white/5 text-[9px] uppercase tracking-tighter flex flex-col items-center justify-center gap-1 transition-all group"
-              >
-                <Timer size={14} className="group-hover:text-[#ff4e00]" />
-                Pomodoro
-              </button>
-              <button 
-                onClick={() => handleActionClick("Task Breakdown")}
-                className="py-2 px-3 rounded-xl bg-white/5 hover:bg-[#ff4e00]/20 border border-white/5 text-[9px] uppercase tracking-tighter flex flex-col items-center justify-center gap-1 transition-all group"
-              >
-                <LayoutGrid size={14} className="group-hover:text-[#ff4e00]" />
-                Breakdown
-              </button>
-              <button 
-                onClick={() => handleActionClick("Micro-goal Setting")}
-                className="py-2 px-3 rounded-xl bg-white/5 hover:bg-[#ff4e00]/20 border border-white/5 text-[9px] uppercase tracking-tighter flex flex-col items-center justify-center gap-1 transition-all group"
-              >
-                <Sparkles size={14} className="group-hover:text-[#ff4e00]" />
-                Micro-goal
-              </button>
-              <button 
-                onClick={() => handleActionClick("5-minute Break")}
-                className="py-2 px-3 rounded-xl bg-white/5 hover:bg-[#ff4e00]/20 border border-white/5 text-[9px] uppercase tracking-tighter flex flex-col items-center justify-center gap-1 transition-all group"
-              >
-                <Coffee size={14} className="group-hover:text-[#ff4e00]" />
-                Break
-              </button>
+            <div className="flex items-center justify-between">
+              <h3 className="text-[11px] font-bold uppercase tracking-wider text-[#6B7280] dark:text-[#94A3B8] flex items-center gap-2">
+                <Mic size={14} className="text-[#0891B2] dark:text-[#2DD4BF]" />
+                Mic Sensitivity
+              </h3>
+              <span className="text-[#0891B2] dark:text-[#2DD4BF] font-mono text-[11px] font-medium">{Math.round(sensitivity * 100)}%</span>
+            </div>
+            <div className="px-1">
+              <input 
+                type="range" 
+                min="0" 
+                max="3" 
+                step="0.1" 
+                value={sensitivity} 
+                onChange={handleSensitivityChange}
+                className="w-full h-2 bg-[#F5F5F0] dark:bg-[#0F172A] rounded-lg appearance-none cursor-pointer accent-[#0891B2] dark:accent-[#2DD4BF]"
+              />
+            </div>
+            <div className="flex justify-between text-[9px] uppercase font-bold tracking-widest text-[#94A3B8] dark:text-[#475569] px-1">
+              <span>Low</span>
+              <span>Normal</span>
+              <span>High</span>
             </div>
           </motion.div>
         </div>
 
-        {/* Sensitivity Control */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="w-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 space-y-4"
-        >
-          <div className="flex items-center justify-between">
-            <h3 className="text-xs font-medium uppercase tracking-wider opacity-60 flex items-center gap-2">
-              <Mic size={14} className="text-[#ff4e00]" />
-              Mic Sensitivity
-            </h3>
-            <span className="text-[#ff4e00] font-mono text-[10px]">{Math.round(sensitivity * 100)}%</span>
-          </div>
-          <input 
-            type="range" 
-            min="0" 
-            max="3" 
-            step="0.1" 
-            value={sensitivity} 
-            onChange={handleSensitivityChange}
-            className="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[#ff4e00]"
-          />
-          <div className="flex justify-between text-[8px] uppercase tracking-widest opacity-30">
-            <span>Low</span>
-            <span>Normal</span>
-            <span>High</span>
-          </div>
-        </motion.div>
-
         {/* Safety Footer */}
-        <footer className="w-full pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 opacity-30 text-[10px] uppercase tracking-widest">
+        <footer className="w-full mt-4 pt-6 border-t border-[#E2E8F0] dark:border-[#334155] flex flex-col md:flex-row items-center justify-between gap-4 text-[#94A3B8] dark:text-[#475569] text-[11px] font-semibold uppercase tracking-wider px-4">
           <div className="flex items-center gap-2">
-            <AlertCircle size={12} />
+            <AlertCircle size={14} />
             Supportive Companion • Not Medical Advice
           </div>
-          <div className="flex items-center gap-4">
-            <button className="hover:opacity-100 transition-opacity">Help Resources</button>
-            <button className="hover:opacity-100 transition-opacity">Privacy</button>
+          <div className="flex items-center gap-6">
+            <button className="hover:text-[#0F172A] dark:hover:text-[#F8FAFC] transition-colors">Help Resources</button>
+            <button className="hover:text-[#0F172A] dark:hover:text-[#F8FAFC] transition-colors">Privacy</button>
           </div>
         </footer>
       </main>
 
-      {/* Background Noise Texture */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
     </div>
   );
 }

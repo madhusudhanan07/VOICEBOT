@@ -1,9 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Playfair Display", serif;
+  --font-sans: "Raleway", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Lora", ui-serif, Georgia, serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Biophilic Light Palette */
+  --color-brand-primary: #6B7280;
+  --color-brand-secondary: #78716C;
+  --color-brand-accent: #0891B2;
+  --color-brand-bg: #F5F5F0;
+  --color-brand-fg: #0F172A;
+  --color-brand-card: #FFFFFF;
+  --color-brand-muted: #E2E8F0;
+  --color-brand-muted-fg: #475569;
+  --color-brand-border: #E2E8F0;
+  
+  /* Biophilic Dark Palette */
+  --color-dark-brand-bg: #0F172A;
+  --color-dark-brand-fg: #F8FAFC;
+  --color-dark-brand-card: #1E293B;
+  --color-dark-brand-accent: #2DD4BF;
+  --color-dark-brand-muted: #334155;
+  --color-dark-brand-muted-fg: #94A3B8;
+  --color-dark-brand-border: #334155;
 }
 
 @utility scrollbar-hide {
